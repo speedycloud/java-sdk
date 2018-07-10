@@ -96,9 +96,19 @@ public class S3Sample {
             URL objectUrl = s3Client.generatePresignedUrl(bucketName, key, date);
             System.out.println("Generate Presigned URL: " + objectUrl);
 
+            // 拷贝对象(一)
+            ObjectMetadata objectMetadata = s3Client.getObjectMetadata(bucketName, key);
+            System.out.println("\nSource ETag:" + objectMetadata.getETag());
+            String bucketName2 = "my-dest-s3-bucket-" + UUID.randomUUID();
+            String destKey = "destKey-" + UUID.randomUUID();
+            s3Client.createBucket(bucketName2);
+            CopyObjectResult copyObjectResult = s3Client.copyObject(bucketName, key, bucketName2, destKey);
+            System.out.println("\nDest ETag:" + copyObjectResult.getETag());
+
             // 删除对象
             System.out.println("\nDeleting an object\n");
             s3Client.deleteObject(bucketName, key);
+            s3Client.deleteObject(bucketName2, destKey);
 
             // 删除桶
             System.out.println("Deleting bucket " + bucketName + "\n");
