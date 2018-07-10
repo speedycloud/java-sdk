@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URL;
+import java.util.Date;
 import java.util.UUID;
 
 import com.amazonaws.AmazonClientException;
@@ -86,8 +88,16 @@ public class S3Sample {
             }
             System.out.println();
 
+            // 生成预签名外链地址、有效期为15分钟
+            long currentTime = new Date().getTime();
+            // 15 Minutes
+            currentTime += 15 * 60 * 1000;
+            Date date = new Date(currentTime);
+            URL objectUrl = s3Client.generatePresignedUrl(bucketName, key, date);
+            System.out.println("Generate Presigned URL: " + objectUrl);
+
             // 删除对象
-            System.out.println("Deleting an object\n");
+            System.out.println("\nDeleting an object\n");
             s3Client.deleteObject(bucketName, key);
 
             // 删除桶
