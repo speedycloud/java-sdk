@@ -22,6 +22,7 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.speedycloud.services.s3.AmazonS3;
 import com.speedycloud.services.s3.AmazonS3Client;
+import com.speedycloud.services.s3.S3ClientOptions;
 import com.speedycloud.services.s3.model.Bucket;
 import com.speedycloud.services.s3.model.GetObjectRequest;
 import com.speedycloud.services.s3.model.ListObjectsRequest;
@@ -45,6 +46,7 @@ public class S3Sample {
         clientConfig.setSignerOverride("S3SignerType");
         clientConfig.setProtocol(Protocol.HTTP);
         AmazonS3 s3Client = new AmazonS3Client(credentials, clientConfig);
+        s3Client.setS3ClientOptions(S3ClientOptions.builder().setPathStyleAccess(true).build());
         s3Client.setEndpoint(endpoint);
 
         // 设置桶名、对象名
